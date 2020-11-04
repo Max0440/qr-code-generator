@@ -1,5 +1,6 @@
 const express = require('express');
 const qrcode = require('qrcode');
+const yup = require('yup');
 const { nanoid } = require('nanoid');
 const { ensureAuthenticated } = require('../config/auth.js');
 
@@ -48,11 +49,6 @@ router.post('/add', ensureAuthenticated, async (req, res) => {
 
     let errors = [];
 
-    if (!url) {
-        errors.push({ msg: 'Please fill in url' });
-    }
-
-
     //check if slug entered & not in db
     if (!slug) {
         var validSlug = false;
@@ -79,6 +75,24 @@ router.post('/add', ensureAuthenticated, async (req, res) => {
         }
     }
 
+    //ckeck if incoming data is valid
+    //TODO: check if url friendly
+    const inputSchema = yup.object().shape({
+        url: yup.string().trim().url().required(),
+        slug: yup.string(),
+    });
+
+    const newQrcode = new Qrcode({
+        code: 'undefined',
+        url: url,
+        scans: 0,
+        slug: slug,
+    });
+
+    if (!await inputSchema.isValid(newQrcode)) {
+        errors.push({ msg: 'Error in data' });
+    }
+
     if (errors.length > 0) {
         res.render('qrcode/add', {
             errors: errors,
@@ -88,13 +102,6 @@ router.post('/add', ensureAuthenticated, async (req, res) => {
     }
 
     console.log('Slug:', slug);
-
-    const newQrcode = new Qrcode({
-        code: 'undefined',
-        url: url,
-        scans: 0,
-        slug: slug,
-    });
 
     newQrcode
         .save()

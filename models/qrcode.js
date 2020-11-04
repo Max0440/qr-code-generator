@@ -24,8 +24,6 @@ const QrcodeSchema = new mongoose.Schema({
     },
 });
 
-mongooseAutoIncrement.initialize(mongoose.connection);
-QrcodeSchema.plugin(mongooseAutoIncrement.plugin, { model: 'Qrcode', field: 'codeId', startAt: 1, incrementBy: 1 });
 const Qrcode = mongoose.model('Qrcode', QrcodeSchema);
 
 module.exports = Qrcode;
