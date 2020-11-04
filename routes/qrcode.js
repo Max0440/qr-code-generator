@@ -51,7 +51,6 @@ router.post('/add', ensureAuthenticated, async (req, res) => {
     if (!slug) {
         var validSlug = false;
         while (!validSlug) {
-            console.log('unvalid');
             try {
                 slug = generateSlug();
                 let inDb = await getCode(slug);

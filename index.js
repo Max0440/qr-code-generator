@@ -13,6 +13,7 @@ const app = express();
 require('./config/passport')(passport);
 
 //mongoose
+mongoose.set('useFindAndModify', false);
 mongoose
     .connect('mongodb://localhost/' + process.env.MONGOOSE_DB_NAME, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('connected...'))
@@ -66,3 +67,4 @@ app.listen(process.env.EXPRESS_PORT);
 //TODO: Error handler
 //TODO: Database useFindAndModify
 //TODO: write * in "QR Code"
+//TODO: user can change own password
