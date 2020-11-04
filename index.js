@@ -65,6 +65,5 @@ app.use((req, res) => {
 app.listen(process.env.EXPRESS_PORT);
 
 //TODO: Error handler
-//TODO: Database useFindAndModify
-//TODO: write * in "QR Code"
 //TODO: user can change own password
+//TODO: error messages
