@@ -87,7 +87,7 @@ router.post('/add', ensureAuthenticated, async (req, res) => {
         slug: slug,
     });
 
-    if (!await inputSchema.isValid(newQrcode)) {
+    if (!(await inputSchema.isValid(newQrcode))) {
         errors.push({ msg: 'Error in data' });
     }
 
@@ -112,7 +112,7 @@ router.post('/add', ensureAuthenticated, async (req, res) => {
                     if (error) throw error;
 
                     try {
-                        await addCodeToUser(result, req.user._id);
+                        await addSlugToUser(result, req.user._id);
 
                         req.flash('success_msg', 'Item added');
                         res.redirect('/qrcode/add');
@@ -123,6 +123,54 @@ router.post('/add', ensureAuthenticated, async (req, res) => {
             });
         })
         .catch((value) => console.error(value));
+});
+
+//delete qrcode
+router.post('/delete', ensureAuthenticated, async (req, res) => {
+    var slug = req.body.delete;
+
+    /**TODOS:
+     * find and delete code
+     */
+
+    let errors = [];
+
+    try {
+        var userCodes = await getSlugsFromUser(req.user._id);
+    } catch (e) {
+        console.error(e);
+    }
+
+    for (let i = 0; i < userCodes.length; i++) {
+        const element = userCodes[i];
+        if (element === slug) {
+            var validSlug = true;
+            break;
+        }
+    }
+
+    if (!validSlug) {
+        console.error('error slug not valid');
+        errors.push({ msg: 'Unauthorized' });
+    }
+
+    if (errors.length > 0) {
+        res.render('qrcode/add', {
+            errors: errors,
+            user: req.user,
+        });
+        return;
+    }
+
+    //delete code
+    Qrcode.findOneAndDelete({ slug: slug }, (err, result) => {
+        if (err) throw err
+    });
+
+    //Delete qrcode from user
+    removeSlugFromUser(slug, req.user._id)
+    
+    res.redirect('/qrcode/');
 });
 
 //scan qrcode
@@ -167,9 +215,26 @@ async function updateScans(id) {
     }
 }
 
-async function addCodeToUser(data, userId) {
+async function addSlugToUser(data, userId) {
     try {
         await User.findByIdAndUpdate(userId, { $push: { slugs: data.slug } });
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+async function removeSlugFromUser(slug, userId) {
+    try {
+        await User.findByIdAndUpdate(userId, { $pull: { slugs: slug } });
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+async function getSlugsFromUser(userId) {
+    try {
+        let user = await User.findById(userId).exec();
+        return user.slugs;
     } catch (e) {
         console.error(e);
     }

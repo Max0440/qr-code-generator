@@ -10,8 +10,11 @@
             <h2>Create date: <%= code.date %></h2>
             <h3>Scans: <%= code.scans %></h3>
             <img src='<%= code.code %>' alt='qrcode'>
+            <form action="/qrcode/delete" method="POST">
+                <button type="submit" name="delete" value="<%= code.slug %>">Delete</button>
+            </form>
+            <!--TODO: Edit Button-->
             <hr style="height: 6px; background-color: black;">
-            <!--TODO: Delete Button-->
         <% } else { %>
             <h2>Error reading QR code</h2>
             <hr style="height: 6px; background-color: black;">
