@@ -33,7 +33,6 @@ router.get('/register', (req, res) => {
 
 //register handler
 router.post('/register', async (req, res) => {
-    //TODO in try catch
     const { name, username, email, password, password2 } = req.body;
     let errors = [];
     console.log(' Name ' + name + 'username ' + username + ' email :' + email + ' pass:' + password);
@@ -67,8 +66,12 @@ router.post('/register', async (req, res) => {
     }
 
     //validation passed
-    const emailFound = await User.findOne({ email: email }).exec();
-    const usernameFound = await User.findOne({ username: username }).exec();
+    try {
+        var emailFound = await User.findOne({ email: email }).exec();
+        var usernameFound = await User.findOne({ username: username }).exec();
+    } catch (e) {
+        console.error(e);
+    }
 
     if (emailFound) {
         console.log(emailFound);

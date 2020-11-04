@@ -43,8 +43,6 @@ router.get('/add', ensureAuthenticated, (req, res) => {
 
 //add qrcode handler
 router.post('/add', ensureAuthenticated, async (req, res) => {
-    //TODO check if actual url
-    //TODO check if slug is url friendly
     var { url, slug } = req.body;
 
     let errors = [];
@@ -76,7 +74,7 @@ router.post('/add', ensureAuthenticated, async (req, res) => {
     }
 
     //ckeck if incoming data is valid
-    //TODO: check if url friendly
+    //TODO: check if slug is url friendly
     const inputSchema = yup.object().shape({
         url: yup.string().trim().url().required(),
         slug: yup.string(),
