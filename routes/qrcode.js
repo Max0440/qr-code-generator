@@ -41,15 +41,42 @@ router.get('/add', ensureAuthenticated, (req, res) => {
 });
 
 //add qrcode handler
-router.post('/add', ensureAuthenticated, (req, res) => {
+router.post('/add', ensureAuthenticated, async (req, res) => {
     //TODO check if actual url
-    //TODO check if slug is url friendly & not in db
+    //TODO check if slug is url friendly
     var { url, slug } = req.body;
 
     let errors = [];
 
     if (!url) {
         errors.push({ msg: 'Please fill in url' });
+    }
+
+
+    //check if slug entered & not in db
+    if (!slug) {
+        var validSlug = false;
+        while (!validSlug) {
+            console.log('unvalid');
+            try {
+                slug = generateSlug();
+                let inDb = await getCode(slug);
+                if (!inDb) {
+                    validSlug = true;
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+    } else {
+        try {
+            let inDb = await getCode(slug);
+            if (inDb) {
+                errors.push({ msg: 'The slug is taken' });
+            }
+        } catch (e) {
+            console.error(e);
+        }
     }
 
     if (errors.length > 0) {
@@ -60,11 +87,6 @@ router.post('/add', ensureAuthenticated, (req, res) => {
         return;
     }
 
-    //check if slug entered
-    if (!slug) {
-        slug = nanoid(4);
-        //TODO check if not in db
-    }
     console.log('Slug:', slug);
 
     const newQrcode = new Qrcode({
@@ -119,6 +141,10 @@ router.get('/scan/:id', async (req, res) => {
 
     res.redirect(result.url);
 });
+
+function generateSlug() {
+    return nanoid(process.env.SLUG_SIZE || 4);
+}
 
 async function getCode(slug) {
     try {
