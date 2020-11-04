@@ -1,0 +1,15 @@
+<h1>QR Codes</h1>
+
+<%- include ('../includes/messages') %>
+
+<% if (codes != undefined) { %>
+    <% codes.forEach(code => { %>
+        <h1>URL: <%= code.url %></h1>
+        <!--TODO: Datum schön machen-->
+        <h2>Create date: <%= code.date %></h2>
+        <h3>Scans: <%= code.scans %></h3>
+        <img src='<%= code.code %>' alt='qrcode'>
+        <hr style="height: 6px; background-color: black;">
+        <!--TODO: Delete Button-->
+    <% }) %>
+<% } %>

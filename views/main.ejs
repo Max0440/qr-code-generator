@@ -1,0 +1,19 @@
+<% if(user != undefined) { %>
+
+<h1>Welcome <%= user.name %>!</h1>
+
+<% } else { %>
+
+<h1>Welcome!</h1>
+
+<% } %> <%- include ('./includes/messages') %> <% if(user != undefined) { %>
+
+<a href="/users/logout">→ Logout</a>
+<a href="/qrcode">→ See QrCodes</a>
+<a href="/qrcode/add">→ Add QrCode</a>
+
+<% } else { %>
+
+<a href="/users/login">→ Login</a>
+
+<% } %>

@@ -1,0 +1,11 @@
+<h1>Add QR Code</h1>
+
+<%- include ('../includes/messages') %>
+
+<form action="/qrcode/add" method="POST">
+    <label for="url">url</label>
+    <input type="url" name="url" placeholder="URL" />
+    <button type="submit">Add</button>
+</form>
+
+<div class="qrcode"></div>
