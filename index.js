@@ -65,3 +65,4 @@ app.listen(process.env.EXPRESS_PORT);
 
 //TODO: Error handler
 //TODO: Database useFindAndModify
+//TODO: write * in "QR Code"

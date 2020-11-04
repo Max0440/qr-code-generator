@@ -2,15 +2,21 @@
 
 <%- include ('../includes/messages') %>
 
-<% if (codes != undefined) { %>
+<% if (codes != 0) { %>
     <% codes.forEach(code => { %>
-        <!--TODO: skip if null-->
-        <h1>URL: <%= code.url %></h1>
-        <!--TODO: Datum schön machen-->
-        <h2>Create date: <%= code.date %></h2>
-        <h3>Scans: <%= code.scans %></h3>
-        <img src='<%= code.code %>' alt='qrcode'>
-        <hr style="height: 6px; background-color: black;">
-        <!--TODO: Delete Button-->
+        <% if (code) { %>
+            <h1>URL: <%= code.url %></h1>
+            <!--TODO: Datum schön machen-->
+            <h2>Create date: <%= code.date %></h2>
+            <h3>Scans: <%= code.scans %></h3>
+            <img src='<%= code.code %>' alt='qrcode'>
+            <hr style="height: 6px; background-color: black;">
+            <!--TODO: Delete Button-->
+        <% } else { %>
+            <h2>Error reading QR code</h2>
+            <hr style="height: 6px; background-color: black;">
+        <% } %>
     <% }) %>
+<% } else { %>
+    <h1>You don't have any QR Codes yet</h1>
 <% } %>
