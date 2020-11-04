@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const mongooseAutoIncrement = require('mongoose-auto-increment');
 
 const QrcodeSchema = new mongoose.Schema({
-    codeId: {
+    slug: {
         type: String,
         required: true,
     },

@@ -4,6 +4,7 @@
 
 <% if (codes != undefined) { %>
     <% codes.forEach(code => { %>
+        <!--TODO: skip if null-->
         <h1>URL: <%= code.url %></h1>
         <!--TODO: Datum schön machen-->
         <h2>Create date: <%= code.date %></h2>

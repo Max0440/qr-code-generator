@@ -17,7 +17,7 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    qrcodes: {
+    slugs: {
         type: Array,
         required: true,
     },

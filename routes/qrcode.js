@@ -1,5 +1,6 @@
 const express = require('express');
 const qrcode = require('qrcode');
+const { nanoid } = require('nanoid');
 const { ensureAuthenticated } = require('../config/auth.js');
 
 const Qrcode = require('../models/qrcode');
@@ -11,9 +12,9 @@ const router = express();
 router.get('/', ensureAuthenticated, async (req, res) => {
     try {
         var codes = await User.findById(req.user._id);
-        codes = codes.qrcodes;
+        codes = codes.slugs;
     } catch (e) {
-        console.log(e);
+        console.error(e);
     }
 
     try {
@@ -23,7 +24,7 @@ router.get('/', ensureAuthenticated, async (req, res) => {
             codeArray.push(await getCode(element));
         }
     } catch (e) {
-        console.log(e);
+        console.error(e);
     }
 
     res.render('qrcode/show', {
@@ -42,8 +43,8 @@ router.get('/add', ensureAuthenticated, (req, res) => {
 //add qrcode handler
 router.post('/add', ensureAuthenticated, (req, res) => {
     //TODO check if actual url
-    const url = req.body.url;
-    console.log(url);
+    //TODO check if slug is url friendly & not in db
+    var { url, slug } = req.body;
 
     let errors = [];
 
@@ -59,38 +60,42 @@ router.post('/add', ensureAuthenticated, (req, res) => {
         return;
     }
 
+    //check if slug entered
+    if (!slug) {
+        slug = nanoid(4);
+        //TODO check if not in db
+    }
+    console.log('Slug:', slug);
+
     const newQrcode = new Qrcode({
         code: 'undefined',
         url: url,
         scans: 0,
+        slug: slug,
     });
 
-    Qrcode.nextCount((err, count) => {
-        if (err) throw err;
+    newQrcode
+        .save()
+        .then((value) => {
+            qrcode.toDataURL(process.env.FORWARDING_URL_START + value.slug, function (err, code) {
+                if (err) throw err;
 
-        newQrcode
-            .save()
-            .then((value) => {
-                qrcode.toDataURL(process.env.FORWARDING_URL_START + value.codeId, function (err, code) {
-                    if (err) throw err;
+                //Add new qrcode to db
+                Qrcode.findByIdAndUpdate(value._id, { code: code }, async (error, result) => {
+                    if (error) throw error;
 
-                    //Add new qrcode to db
-                    Qrcode.findByIdAndUpdate(value._id, { code: code }, async (error, result) => {
-                        if (error) throw error;
+                    try {
+                        await addCodeToUser(result, req.user._id);
 
-                        try {
-                            await addCodeToUser(result, req.user._id);
-
-                            req.flash('success_msg', 'Item added');
-                            res.redirect('/qrcode/add');
-                        } catch (e) {
-                            console.log(e);
-                        }
-                    });
+                        req.flash('success_msg', 'Item added');
+                        res.redirect('/qrcode/add');
+                    } catch (e) {
+                        console.error(e);
+                    }
                 });
-            })
-            .catch((value) => console.log(value));
-    });
+            });
+        })
+        .catch((value) => console.error(value));
 });
 
 //scan qrcode
@@ -109,17 +114,15 @@ router.get('/scan/:id', async (req, res) => {
 
         await updateScans(result._id);
     } catch (e) {
-        console.log(e);
+        console.error(e);
     }
 
-    //TODO Redirect
-    console.log(result);
     res.redirect(result.url);
 });
 
-async function getCode(codeId) {
+async function getCode(slug) {
     try {
-        return await Qrcode.findOne({ codeId: codeId }).exec();
+        return await Qrcode.findOne({ slug: slug }).exec();
     } catch (e) {
         return false;
     }
@@ -135,10 +138,9 @@ async function updateScans(id) {
 
 async function addCodeToUser(data, userId) {
     try {
-        console.log(userId);
-        await User.findByIdAndUpdate(userId, { $push: { qrcodes: data.codeId } });
+        await User.findByIdAndUpdate(userId, { $push: { slugs: data.slug } });
     } catch (e) {
-        console.log(e);
+        console.error(e);
     }
 }
 
