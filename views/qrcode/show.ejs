@@ -21,17 +21,23 @@
                 <img src="<%= code.code %>" alt="qrcode" />
             </div>
         </div>
-        
-        <div class="infos" style="display: none;">
+
+        <div class="infos" style="display: none">
             <h2>Scans: <%= code.scans %></h2>
-            <h2>Redirect URL: <%= code.redirectUrl %> </h2>
-            <h2 id="last-elemet">Create date: <%= code.date %></h2>
+            <h2>Redirect URL: <%= code.redirectUrl %></h2>
+            <h2>Create date: <%= code.date %></h2>
+            <div class="buttons">
+                <form action="/qrcode/delete" method="POST">
+                    <button type="submit" name="delete" value="<%= code.slug %>">Delete</button>
+                </form>
+                <form action="#" method="POST">
+                    <button type="submit" name="edit" value="<%= code.slug %>">Edit</button>
+                </form>
+            </div>
         </div>
     </div>
     <!--
-    <form action="/qrcode/delete" method="POST">
-        <button type="submit" name="delete" value="<%= code.slug %>">Delete</button>
-    </form>
+    
     -->
     <% } else { %>
     <h2>Error reading QR code</h2>

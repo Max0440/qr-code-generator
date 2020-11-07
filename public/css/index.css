@@ -328,6 +328,26 @@ hr {
   color: #dcdddf;
 }
 
-.qrcodes .qrcode-wrapper .infos #last-elemet {
-  margin-bottom: 10px;
+.qrcodes .qrcode-wrapper .infos .buttons {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  background-color: transparent;
+}
+
+.qrcodes .qrcode-wrapper .infos .buttons form {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  margin-left: 0;
+  margin-right: 0;
+  background-color: transparent;
+}
+
+.qrcodes .qrcode-wrapper .infos .buttons form button {
+  width: 150px;
+  height: 30px;
+  margin: 10px 15px 15px auto;
+  font-size: 20px;
+  border-radius: 7px;
 }
