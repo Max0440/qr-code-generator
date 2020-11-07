@@ -4,5 +4,4 @@ npm i express express-session express-ejs-layouts connect-flash passport passpor
 
 - [ ] render data when error
 - [ ] navbar
-- [ ] 404 Errormsg red
 - [ ] render userdata in 404

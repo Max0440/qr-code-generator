@@ -55,10 +55,12 @@ app.use('/qrcode', require('./routes/qrcode'));
 
 //404 Error
 app.use((req, res) => {
+    res.status(404);
     res.render('404', {
         protocol: req.protocol,
         host: req.get('host'),
         originalUrl: req.originalUrl,
+        user: req.user,
     });
 });
 
@@ -66,4 +68,4 @@ app.listen(process.env.EXPRESS_PORT);
 
 //TODO: Error handler
 //TODO: user can change own password
-//TODO: error messages
+//TODO: rewrite error messages
