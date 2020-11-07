@@ -94,6 +94,8 @@ router.post('/add', ensureAuthenticated, async (req, res) => {
     if (errors.length > 0) {
         res.render('qrcode/add', {
             errors: errors,
+            url: url,
+            slug: slug,
             user: req.user,
         });
         return;

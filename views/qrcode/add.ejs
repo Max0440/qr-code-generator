@@ -5,8 +5,8 @@
 <a href="/qrcode">→ See your QR Codes</a>
 
 <form action="/qrcode/add" method="POST">
-    <input type="url" name="url" placeholder="URL" />
-    <input type="text" name="slug" placeholder="Slug" />
+    <input type="url" name="url" placeholder="URL" value="<%= typeof url != 'undefined' ? url : '' %>" />
+    <input type="text" name="slug" placeholder="Slug" value="<%= typeof slug != 'undefined' ? slug : '' %>" />
     <button type="submit">Add</button>
 </form>
 
