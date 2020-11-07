@@ -4,28 +4,29 @@ const User = require('../models/users');
 
 module.exports = function (passport) {
     passport.use(
-        new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
-            //match user
-            User.findOne({ email: email })
-                .then((user) => {
-                    if (!user) {
-                        return done(null, false, { message: 'The email is not registered' });
-                    }
+        new LocalStrategy({ usernameField: 'email' }, async (email, password, done) => {
+            console.log(email);
+            //check email
+            var user = await checkEmail(email);
 
-                    //match password
-                    bcrypt.compare(password, user.password, (err, result) => {
-                        if (err) throw err;
+            if (user === null) {
+                user = await checkUsername(email);
+            }
 
-                        if (result) {
-                            return done(null, user);
-                        } else {
-                            return done(null, false, { message: 'Password incorrect' });
-                        }
-                    });
-                })
-                .catch((err) => {
-                    console.error(err);
-                });
+            if (user === null) {
+                return done(null, false, { message: 'Username/Email or password incorrect' });
+            }
+
+            //match password
+            bcrypt.compare(password, user.password, (err, result) => {
+                if (err) throw err;
+
+                if (result) {
+                    return done(null, user);
+                } else {
+                    return done(null, false, { message: 'Username/Email or password incorrect' });
+                }
+            });
         })
     );
     passport.serializeUser(function (user, done) {
@@ -38,3 +39,19 @@ module.exports = function (passport) {
         });
     });
 };
+
+async function checkEmail(email) {
+    try {
+        return await User.findOne({ email: email }).exec();
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+async function checkUsername(username) {
+    try {
+        return await User.findOne({ username: username }).exec();
+    } catch (e) {
+        console.error(e);
+    }
+}
