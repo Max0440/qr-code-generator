@@ -3,5 +3,3 @@ npm i express express-session express-ejs-layouts connect-flash passport passpor
 # ToDo
 
 - [ ] render data when error
-- [ ] navbar
-- [ ] render userdata in 404
