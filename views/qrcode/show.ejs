@@ -2,26 +2,42 @@
 
 <%- include ('../includes/messages') %>
 
-<a href="/qrcode/add">Add QR Code</a>
+<a href="/qrcode/add">→ Add QR Code</a>
 
 <% if (codes != 0) { %>
-    <% codes.forEach(code => { %>
-        <% if (code) { %>
-            <h1>URL: <%= code.url %></h1>
-            <!--TODO: Datum schön machen-->
-            <h2>Create date: <%= code.date %></h2>
-            <h3>Scans: <%= code.scans %></h3>
-            <img src='<%= code.code %>' alt='qrcode'>
-            <form action="/qrcode/delete" method="POST">
-                <button type="submit" name="delete" value="<%= code.slug %>">Delete</button>
-            </form>
-            <!--TODO: Edit Button-->
-            <hr style="height: 6px; background-color: black;">
-        <% } else { %>
-            <h2>Error reading QR code</h2>
-            <hr style="height: 6px; background-color: black;">
-        <% } %>
-    <% }) %>
+<div class="qrcodes">
+    <% codes.forEach(code => { %> <% if (code) { %>
+    <!--TODO: Datum schön machen-->
+    <!--TODO: Edit Button-->
+    <!--TODO: Delete Button-->
+
+    <div class="qrcode-wrapper">
+        <div class="code">
+            <div class="url">
+                <p class="collapse_indicator">></p>
+                <h2>URL: <%= code.url %></h2>
+            </div>
+            <div class="qrcode">
+                <img src="<%= code.code %>" alt="qrcode" />
+            </div>
+        </div>
+        
+        <div class="infos" style="display: none;">
+            <h2>Scans: <%= code.scans %></h2>
+            <h2>Redirect URL: <%= code.redirectUrl %> </h2>
+            <h2 id="last-elemet">Create date: <%= code.date %></h2>
+        </div>
+    </div>
+    <!--
+    <form action="/qrcode/delete" method="POST">
+        <button type="submit" name="delete" value="<%= code.slug %>">Delete</button>
+    </form>
+    -->
+    <% } else { %>
+    <h2>Error reading QR code</h2>
+    <hr style="height: 6px; background-color: black" />
+    <% } %> <% }) %>
+</div>
 <% } else { %>
-    <h1>You don't have any QR Codes yet</h1>
+<h1>You don't have any QR Codes yet</h1>
 <% } %>

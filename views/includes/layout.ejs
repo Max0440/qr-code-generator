@@ -1,8 +1,32 @@
 <html>
     <head>
         <title>QR Code</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+        <link rel="stylesheet" href="/assets/fonts/fonts.css" />
+        <link rel="stylesheet" href="/assets/css/index.css" />
     </head>
     <body>
+        <nav class="navbar">
+            <span class="navbar-toggle" id="js-navbar-toggle">
+                <i class="fa fa-bars"></i>
+            </span>
+            <a href="/" class="logo">QR Code</a>
+            <ul class="main-nav" id="js-menu">
+                <li><a href="/" class="nav-links">Home</a></li>
+
+                <% if(typeof user !== 'undefined') { %>
+                    <li><a href="/qrcode" class="nav-links">See QR Codes</a></li>
+                <li><a href="/qrcode/add" class="nav-links">Add QR Code</a></li>
+                <!--TODO: Logout button-->
+                <% } %>
+            </ul>
+
+        </nav>
+        <hr />
+
         <%- body %>
+
+        <script src="/assets/js/jquery.js"></script>
+        <script src="/assets/js/qrcodeInfoHandler.js"></script>
     </body>
 </html>

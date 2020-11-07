@@ -84,6 +84,7 @@ router.post('/add', ensureAuthenticated, async (req, res) => {
         url: url,
         scans: 0,
         slug: slug,
+        redirectUrl: process.env.FORWARDING_URL_START + slug,
     });
 
     if (!(await inputSchema.isValid(newQrcode))) {

@@ -3,15 +3,13 @@
 <%- include ('../includes/messages') %>
 
 <form action="/users/login" method="POST">
-    <div>
-        <label for="email">Email</label>
-        <input type="email" name="email" placeholder="Enter Email" />
+    <div class="input-field">
+        <input type="email" name="email" placeholder="Enter Email" autocomplete="email" />
     </div>
-    <div>
-        <label for="password">Password</label>
-        <input type="password" name="password" placeholder="Enter Password" />
+    <div class="input-field">
+        <input type="password" name="password" placeholder="Enter Password" autocomplete="current-password" />
     </div>
     <button type="submit" class="btn btn-primary btn-block">Login</button>
 </form>
 
-<p>Don't have an account? <a href="/users/register">Register</a></p>
+<a href="/users/register">Not a member? → Register</a>
