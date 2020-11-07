@@ -4,8 +4,8 @@ $(() => {
         var infos = $(this).children('.infos');
 
         //TODO: Always opened
-        //indicator.animateRotate(90, 400);
-        //$(infos).show(500);
+        indicator.animateRotate(90, 400);
+        $(infos).show(500);
 
         $(indicator).click(function (e) {
             e.preventDefault();

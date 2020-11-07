@@ -1,11 +1,11 @@
-<h1>Add QR Code</h1>
+<h1>Edit QR Codes</h1>
 
 <%- include ('../includes/messages') %>
 
-<a href="/qrcode">→ See your QR Codes</a>
+<a href="/qrcode">→ Go back to your QR Codes</a>
 
-<form action="/qrcode/add" method="POST">
+<form action="/qrcode/editSubmit" method="POST">
     <input type="url" name="url" placeholder="URL" value="<%= typeof url != 'undefined' ? url : '' %>" />
     <input type="text" name="slug" placeholder="Slug" value="<%= typeof slug != 'undefined' ? slug : '' %>" />
-    <button type="submit">Add</button>
+    <button type="submit" name="oldSlug" value="<%= typeof slug != 'undefined' ? slug : '' %>" >Change</button>
 </form>

@@ -9,7 +9,6 @@
     <% codes.forEach(code => { %> <% if (code) { %>
     <!--TODO: Datum schön machen-->
     <!--TODO: Edit Button-->
-    <!--TODO: Delete Button-->
 
     <div class="qrcode-wrapper">
         <div class="code">
@@ -24,13 +23,13 @@
 
         <div class="infos" style="display: none">
             <h2>Scans: <%= code.scans %></h2>
-            <h2>Redirect URL: <%= code.redirectUrl %></h2>
+            <h2>Redirect URL: <%= redirectUrl + code.slug %></h2>
             <h2>Create date: <%= code.date %></h2>
             <div class="buttons">
                 <form action="/qrcode/delete" method="POST">
                     <button type="submit" name="delete" value="<%= code.slug %>">Delete</button>
                 </form>
-                <form action="#" method="POST">
+                <form action="/qrcode/edit" method="POST">
                     <button type="submit" name="edit" value="<%= code.slug %>">Edit</button>
                 </form>
             </div>

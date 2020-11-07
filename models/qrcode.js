@@ -6,10 +6,6 @@ const QrcodeSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    redirectUrl: {
-        type: String,
-        required: true,
-    },
     code: {
         type: String,
         required: true,

@@ -30,6 +30,7 @@ router.get('/', ensureAuthenticated, async (req, res) => {
 
     res.render('qrcode/show', {
         codes: codeArray,
+        redirectUrl: process.env.FORWARDING_URL_START,
         user: req.user,
     });
 });
@@ -39,6 +40,155 @@ router.get('/add', ensureAuthenticated, (req, res) => {
     res.render('qrcode/add', {
         user: req.user,
     });
+});
+
+//edit qrcode page
+router.post('/edit', ensureAuthenticated, async (req, res) => {
+    var slug = req.body.edit;
+    console.log(slug);
+
+    let errors = [];
+
+    try {
+        var userCodes = await getSlugsFromUser(req.user._id);
+    } catch (e) {
+        console.error(e);
+    }
+
+    for (let i = 0; i < userCodes.length; i++) {
+        const element = userCodes[i];
+        if (element === slug) {
+            var validSlug = true;
+            break;
+        }
+    }
+
+    if (!validSlug) {
+        errors.push({ msg: 'Unauthorized' });
+    }
+
+    if (errors.length > 0) {
+        req.flash('error_msg', errors[0].msg);
+        res.redirect('/qrcode');
+        return;
+    }
+
+    try {
+        var code = await getCode(slug);
+    } catch (e) {
+        console.error(e);
+    }
+
+    res.render('qrcode/edit', {
+        url: code.url,
+        slug: code.slug,
+        user: req.user,
+    });
+});
+
+//edit qrcode handeler
+router.post('/editSubmit', ensureAuthenticated, async (req, res) => {
+    var { url, slug, oldSlug } = req.body;
+
+    let errors = [];
+
+    //check if old slug is from user
+    try {
+        var userCodes = await getSlugsFromUser(req.user._id);
+    } catch (e) {
+        console.error(e);
+    }
+
+    for (let i = 0; i < userCodes.length; i++) {
+        const element = userCodes[i];
+        if (element === oldSlug) {
+            var validSlug = true;
+            break;
+        }
+    }
+
+    if (!validSlug) {
+        errors.push({ msg: 'Unauthorized' });
+    }
+
+    //check if slug entered & not in db
+    try {
+        if (slug.length === 0) {
+            errors.push({ msg: 'pls enter slug' });
+        }
+        let inDb = await getCode(slug);
+        if (inDb) {
+            if (inDb.slug != oldSlug) {
+                errors.push({ msg: 'The slug is taken' });
+            }
+        }
+    } catch (e) {
+        console.error(e);
+    }
+
+    //ckeck if incoming data is valid
+    //TODO: check if slug is url friendly
+    const inputSchema = yup.object().shape({
+        url: yup.string().trim().url().required(),
+        slug: yup.string(),
+    });
+
+    const newQrcode = new Qrcode({
+        code: 'undefined',
+        url: url,
+        scans: 0,
+        slug: slug,
+    });
+
+    if (!(await inputSchema.isValid(newQrcode))) {
+        errors.push({ msg: 'Error in data' });
+    }
+
+    //TODO Slug taken, redirect to edit page
+    //TODO Unauthorized, redirect to qrcode page
+    if (errors.length > 0) {
+        console.log(errors);
+        req.flash('error_msg', errors[0].msg);
+        res.redirect('/qrcode');
+        return;
+    }
+
+    console.log('Slug:', slug);
+    console.log('Url:', url);
+
+    //update url and slug
+    try {
+        await Qrcode.findOneAndUpdate({ slug: oldSlug }, { slug: slug, url: url }).exec();
+    } catch (e) {
+        console.error(e);
+    }
+
+    if (slug != oldSlug) {
+        //update slug in user collection
+        try {
+            await updateSlugFromUser(oldSlug, slug, req.user._id);
+        } catch (e) {
+            console.error(e);
+        }
+
+        //generate new qrcode
+        qrcode.toDataURL(process.env.FORWARDING_URL_START + slug, async function (err, code) {
+            if (err) throw err;
+
+            //Update qrcode in db
+            
+            try {
+                await Qrcode.findOneAndUpdate({slug: slug}, { code: code }).exec();
+            } catch (e) {
+                console.error(e);
+            }
+        });
+
+        req.flash('error_msg', 'Warning: The old QR Code became invalid');
+    }
+
+    req.flash('success_msg', 'Code updated');
+    res.redirect('/qrcode');
 });
 
 //add qrcode handler
@@ -84,7 +234,6 @@ router.post('/add', ensureAuthenticated, async (req, res) => {
         url: url,
         scans: 0,
         slug: slug,
-        redirectUrl: process.env.FORWARDING_URL_START + slug,
     });
 
     if (!(await inputSchema.isValid(newQrcode))) {
@@ -114,7 +263,7 @@ router.post('/add', ensureAuthenticated, async (req, res) => {
                     if (error) throw error;
 
                     try {
-                        await addSlugToUser(result, req.user._id);
+                        await addSlugToUser(result.slug, req.user._id);
 
                         req.flash('success_msg', 'Item added');
                         res.redirect('/qrcode/add');
@@ -130,10 +279,6 @@ router.post('/add', ensureAuthenticated, async (req, res) => {
 //delete qrcode
 router.post('/delete', ensureAuthenticated, async (req, res) => {
     var slug = req.body.delete;
-
-    /**TODOS:
-     * find and delete code
-     */
 
     let errors = [];
 
@@ -166,12 +311,12 @@ router.post('/delete', ensureAuthenticated, async (req, res) => {
 
     //delete code
     Qrcode.findOneAndDelete({ slug: slug }, (err, result) => {
-        if (err) throw err
+        if (err) throw err;
     });
 
     //Delete qrcode from user
-    removeSlugFromUser(slug, req.user._id)
-    
+    removeSlugFromUser(slug, req.user._id);
+
     res.redirect('/qrcode/');
 });
 
@@ -197,6 +342,8 @@ router.get('/scan/:id', async (req, res) => {
     res.redirect(result.url);
 });
 
+//edit
+
 function generateSlug() {
     return nanoid(process.env.SLUG_SIZE || 4);
 }
@@ -217,9 +364,9 @@ async function updateScans(id) {
     }
 }
 
-async function addSlugToUser(data, userId) {
+async function addSlugToUser(slug, userId) {
     try {
-        await User.findByIdAndUpdate(userId, { $push: { slugs: data.slug } });
+        await User.findByIdAndUpdate(userId, { $push: { slugs: slug } });
     } catch (e) {
         console.error(e);
     }
@@ -237,6 +384,15 @@ async function getSlugsFromUser(userId) {
     try {
         let user = await User.findById(userId).exec();
         return user.slugs;
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+async function updateSlugFromUser(oldSlug, newSlug, userId) {
+    try {
+        await removeSlugFromUser(oldSlug, userId);
+        await addSlugToUser(newSlug, userId);
     } catch (e) {
         console.error(e);
     }
