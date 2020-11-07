@@ -124,7 +124,6 @@ router.post('/register', async (req, res) => {
 
 //login handler
 router.post('/login', (req, res, next) => {
-    //TODO: Login with email OR username
     passport.authenticate('local', {
         successRedirect: '/',
         failureRedirect: '/users/login',

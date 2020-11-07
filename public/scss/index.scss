@@ -1,10 +1,9 @@
 // VAL
-$gray1: #36393f;
+$gray1: #42454d;
 $gray2: #2f3136;
 $gray3: #292b2f;
-$gray4: #202225;
-$gray5: #202225;
-$gray6: #18191c;
+$gray4: #1d1f22;
+$gray5: #131416;
 
 $color1: #ffffff;
 $color2: #dcdddf;
@@ -15,7 +14,7 @@ $colorGreen: #00cc5c;
     padding: 0;
     box-sizing: border-box;
     font-family: 'Comfortaa';
-    background-color: #36393f;
+    background-color: $gray1;
 }
 
 h1 {
@@ -54,7 +53,7 @@ input {
     color: $color1;
     opacity: 1;
 
-    background-color: $gray5;
+    background-color: $gray4;
 
     border: none;
     border-radius: 12px;
@@ -67,7 +66,7 @@ input {
     }
 
     &:focus {
-        background-color: $gray6;
+        background-color: $gray5;
         transition-duration: 0.2s;
     }
 }
@@ -85,7 +84,7 @@ button {
     color: $colorGreen;
     opacity: 1;
 
-    background-color: $gray5;
+    background-color: $gray4;
 
     border: none;
     border-radius: 12px;
@@ -101,7 +100,7 @@ button {
 
     &:hover,
     &:focus {
-        background-color: $gray6;
+        background-color: $gray5;
         transition-duration: 0.2s;
     }
 }
@@ -197,7 +196,8 @@ form {
             margin-top: 0;
             transition-duration: 0.5s;
 
-            &:hover {
+            &:hover,
+            &:focus {
                 letter-spacing: 8px;
                 transition-duration: 0.5s;
             }
@@ -225,7 +225,7 @@ hr {
     width: 100%;
     height: 3.5px;
     border: none;
-    background-color: red;
+    background-color: $colorGreen;
     margin-bottom: 20px;
 }
 
@@ -235,69 +235,50 @@ hr {
 
 .qrcodes {
     .qrcode-wrapper {
-        width: 700px;
+        width: 900px;
         margin-left: auto;
         margin-right: auto;
         margin-bottom: 20px;
-        padding-bottom: 000.1px;
         background-color: $gray3;
         border-radius: 20px;
-        ////border: 3px solid red;
 
         .code {
             display: flex;
             background-color: $gray2;
             border-radius: 20px;
-            ////border: 3px solid green;
 
             .url {
-                display: flex;
-                width: fit-content;
-                height: fit-content;
                 margin-top: auto;
                 margin-bottom: auto;
                 margin-left: 20px;
                 background-color: transparent;
 
-                p {
-                    margin-right: 10px;
-                    font-size: 1.7em;
-                    cursor: pointer;
-                }
-
                 h2 {
-                    font-size: 1.7em;
-                }
-
-                p,
-                h2 {
-                    height: fit-content;
+                    font-size: 35px;
                     background-color: transparent;
                     color: $color2;
                 }
             }
 
             .qrcode {
-                height: fit-content;
-                margin-top: 0;
-                margin-bottom: 0;
                 margin-left: auto;
 
                 img {
-                    height: 140px;
+                    height: 170px;
                     width: auto;
                     border-radius: 20px;
+                    background-color: transparent;
                 }
             }
         }
 
         .infos {
-            margin-left: 40px;
+            margin-left: 30px;
             margin-top: 10px;
             background-color: transparent;
 
             h2 {
-                font-size: 1.2em;
+                font-size: 22px;
                 background-color: transparent;
                 color: $color2;
             }
@@ -314,7 +295,7 @@ hr {
 
                     button {
                         width: 150px;
-                        height: 30px;
+                        height: 35px;
                         margin: 10px 15px 15px auto;
                         font-size: 20px;
                         border-radius: 7px;

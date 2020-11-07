@@ -4,7 +4,7 @@
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   font-family: 'Comfortaa';
-  background-color: #36393f;
+  background-color: #42454d;
 }
 
 h1 {
@@ -41,7 +41,7 @@ input {
   text-align: center;
   color: #ffffff;
   opacity: 1;
-  background-color: #202225;
+  background-color: #1d1f22;
   border: none;
   border-radius: 12px;
   -webkit-transition-duration: 0.2s;
@@ -69,7 +69,7 @@ input::placeholder {
 }
 
 input:focus {
-  background-color: #18191c;
+  background-color: #131416;
   -webkit-transition-duration: 0.2s;
           transition-duration: 0.2s;
 }
@@ -84,7 +84,7 @@ button {
   text-align: center;
   color: #00cc5c;
   opacity: 1;
-  background-color: #202225;
+  background-color: #1d1f22;
   border: none;
   border-radius: 12px;
   cursor: pointer;
@@ -113,7 +113,7 @@ button::placeholder {
 }
 
 button:hover, button:focus {
-  background-color: #18191c;
+  background-color: #131416;
   -webkit-transition-duration: 0.2s;
           transition-duration: 0.2s;
 }
@@ -213,7 +213,7 @@ form {
     -webkit-transition-duration: 0.5s;
             transition-duration: 0.5s;
   }
-  .navbar .logo:hover {
+  .navbar .logo:hover, .navbar .logo:focus {
     letter-spacing: 8px;
     -webkit-transition-duration: 0.5s;
             transition-duration: 0.5s;
@@ -244,16 +244,15 @@ hr {
   width: 100%;
   height: 3.5px;
   border: none;
-  background-color: red;
+  background-color: #00cc5c;
   margin-bottom: 20px;
 }
 
 .qrcodes .qrcode-wrapper {
-  width: 700px;
+  width: 900px;
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 20px;
-  padding-bottom: 000.1px;
   background-color: #292b2f;
   border-radius: 20px;
 }
@@ -267,63 +266,37 @@ hr {
 }
 
 .qrcodes .qrcode-wrapper .code .url {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  width: -webkit-fit-content;
-  width: -moz-fit-content;
-  width: fit-content;
-  height: -webkit-fit-content;
-  height: -moz-fit-content;
-  height: fit-content;
   margin-top: auto;
   margin-bottom: auto;
   margin-left: 20px;
   background-color: transparent;
 }
 
-.qrcodes .qrcode-wrapper .code .url p {
-  margin-right: 10px;
-  font-size: 1.7em;
-  cursor: pointer;
-}
-
 .qrcodes .qrcode-wrapper .code .url h2 {
-  font-size: 1.7em;
-}
-
-.qrcodes .qrcode-wrapper .code .url p,
-.qrcodes .qrcode-wrapper .code .url h2 {
-  height: -webkit-fit-content;
-  height: -moz-fit-content;
-  height: fit-content;
+  font-size: 35px;
   background-color: transparent;
   color: #dcdddf;
 }
 
 .qrcodes .qrcode-wrapper .code .qrcode {
-  height: -webkit-fit-content;
-  height: -moz-fit-content;
-  height: fit-content;
-  margin-top: 0;
-  margin-bottom: 0;
   margin-left: auto;
 }
 
 .qrcodes .qrcode-wrapper .code .qrcode img {
-  height: 140px;
+  height: 170px;
   width: auto;
   border-radius: 20px;
+  background-color: transparent;
 }
 
 .qrcodes .qrcode-wrapper .infos {
-  margin-left: 40px;
+  margin-left: 30px;
   margin-top: 10px;
   background-color: transparent;
 }
 
 .qrcodes .qrcode-wrapper .infos h2 {
-  font-size: 1.2em;
+  font-size: 22px;
   background-color: transparent;
   color: #dcdddf;
 }
@@ -346,7 +319,7 @@ hr {
 
 .qrcodes .qrcode-wrapper .infos .buttons form button {
   width: 150px;
-  height: 30px;
+  height: 35px;
   margin: 10px 15px 15px auto;
   font-size: 20px;
   border-radius: 7px;

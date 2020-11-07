@@ -12,7 +12,6 @@
     <div class="qrcode-wrapper">
         <div class="code">
             <div class="url">
-                <p class="collapse_indicator">></p>
                 <h2>URL: <%= code.url %></h2>
             </div>
             <div class="qrcode">
@@ -20,7 +19,7 @@
             </div>
         </div>
 
-        <div class="infos" style="display: none">
+        <div class="infos">
             <h2>Scans: <%= code.scans %></h2>
             <h2>Redirect URL: <%= redirectUrl + code.slug %></h2>
             <h2>Create date: <%= code.date %></h2>

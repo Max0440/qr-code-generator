@@ -246,6 +246,7 @@ router.post('/add', ensureAuthenticated, async (req, res) => {
         errors.push({ msg: 'Error in data' });
     }
 
+    //TODO Dont render slug if auto generated
     if (errors.length > 0) {
         res.render('qrcode/add', {
             errors: errors,
