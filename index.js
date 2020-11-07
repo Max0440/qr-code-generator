@@ -66,5 +66,4 @@ app.use((req, res) => {
 
 app.listen(process.env.EXPRESS_PORT);
 
-//TODO: user can change own password
 //TODO: rewrite error messages

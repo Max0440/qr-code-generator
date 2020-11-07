@@ -43,12 +43,12 @@ router.post('/register', async (req, res) => {
 
     //check if passwords match
     if (password !== password2) {
-        errors.push({ msg: 'passwords dont match' });
+        errors.push({ msg: 'Passwords do not match' });
     }
 
     //check if password is more than 6 characters
     if (password.length < 6) {
-        errors.push({ msg: 'password atleast 6 characters' });
+        errors.push({ msg: 'The password must have at least 6 characters' });
     }
 
     if (errors.length > 0) {
@@ -115,7 +115,7 @@ router.post('/register', async (req, res) => {
         newUser
             .save()
             .then((value) => {
-                req.flash('success_msg', 'You have now registered!');
+                req.flash('success_msg', 'Your account has been created!');
                 res.redirect('/users/login');
             })
             .catch((value) => console.error(value));
@@ -134,7 +134,7 @@ router.post('/login', (req, res, next) => {
 //logout handler
 router.get('/logout', (req, res) => {
     req.logout();
-    req.flash('success_msg', 'Now logged out');
+    req.flash('success_msg', 'You are now logged out');
     res.redirect('/users/login');
 });
 
