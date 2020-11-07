@@ -1,0 +1,17 @@
+<h1>Print QR Codes</h1>
+
+<%- include ('../includes/messages') %>
+
+<a href="/qrcode">→ Go back to your QR Codes</a>
+
+<form action="/qrcode/printSubmit" method="POST">
+    <label for="backgroundColor">background color</label>
+    <input type="color" name="backgroundColor" value="<%= typeof backgroundColor != 'undefined' ? backgroundColor : '' %>" />
+
+    <label for="backgroundColor">QR Code color</label>
+    <input type="color" name="codeColor" value="<%= typeof codeColor != 'undefined' ? codeColor : '' %>" />
+
+    <input type="number" name="scale" placeholder="Size" value="<%= typeof scale != 'undefined' ? scale : '4' %>" />
+
+    <button type="submit" name="slug" value="<%= typeof slug != 'undefined' ? slug : '' %>">Print QR Code</button>
+</form>

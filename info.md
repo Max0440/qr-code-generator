@@ -2,5 +2,4 @@ npm i express express-session express-ejs-layouts connect-flash passport passpor
 
 # ToDo
 
-- [ ] Use other qrcode generator (svg)
 - [ ] User can change owen password

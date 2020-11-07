@@ -9,6 +9,18 @@ const User = require('../models/users');
 
 const router = express();
 
+qrcodeOptions = {
+    errorCorrectionLevel: 'H',
+    type: 'image/jpeg',
+    quality: 1,
+    margin: 3,
+    scale: 5,
+    color: {
+        dark: '#FFFFFF',
+        light: '#2f3136',
+    },
+};
+
 //show qrcodes page
 router.get('/', ensureAuthenticated, async (req, res) => {
     try {
@@ -83,6 +95,102 @@ router.post('/edit', ensureAuthenticated, async (req, res) => {
         slug: code.slug,
         oldSlug: code.slug,
         user: req.user,
+    });
+});
+
+//print qrcode page
+router.post('/print', ensureAuthenticated, async (req, res) => {
+    var slug = req.body.print;
+
+    let errors = [];
+
+    try {
+        var userCodes = await getSlugsFromUser(req.user._id);
+    } catch (e) {
+        console.error(e);
+    }
+
+    for (let i = 0; i < userCodes.length; i++) {
+        const element = userCodes[i];
+        if (element === slug) {
+            var validSlug = true;
+            break;
+        }
+    }
+
+    if (!validSlug) {
+        errors.push({ msg: 'Unauthorized' });
+    }
+
+    if (errors.length > 0) {
+        req.flash('error_msg', errors[0].msg);
+        res.redirect('/qrcode');
+        return;
+    }
+
+    try {
+        var code = await getCode(slug);
+    } catch (e) {
+        console.error(e);
+    }
+
+    res.render('qrcode/print', {
+        url: code.url,
+        backgroundColor: '#2f3136',
+        codeColor: '#FFFFFF',
+        slug: code.slug,
+        user: req.user,
+    });
+});
+
+//edit qrcode handeler
+router.post('/printSubmit', ensureAuthenticated, async (req, res) => {
+    var { slug, backgroundColor, codeColor, scale } = req.body;
+
+    let errors = [];
+
+    //check if old slug is from user
+    try {
+        var userCodes = await getSlugsFromUser(req.user._id);
+    } catch (e) {
+        console.error(e);
+    }
+
+    for (let i = 0; i < userCodes.length; i++) {
+        const element = userCodes[i];
+        if (element === slug) {
+            var validSlug = true;
+            break;
+        }
+    }
+
+    if (!validSlug) {
+        errors.push({ msg: 'Unauthorized' });
+    }
+
+    //set code options
+    customQrcodeOptions = {
+        errorCorrectionLevel: 'H',
+        type: 'image/jpeg',
+        quality: 1,
+        margin: 2,
+        scale: scale,
+        color: {
+            dark: codeColor,
+            light: backgroundColor,
+        },
+    };
+
+    //generate code
+    qrcode.toDataURL(process.env.FORWARDING_URL_START + slug, customQrcodeOptions, function (err, code) {
+        if (err) throw err;
+
+        //TODO: gescheid machen
+        console.log(code);
+        res.render('qrcode/printed', {
+            code: code,
+            user: req.user,
+        })
     });
 });
 
@@ -179,7 +287,7 @@ router.post('/editSubmit', ensureAuthenticated, async (req, res) => {
         }
 
         //generate new qrcode
-        qrcode.toDataURL(process.env.FORWARDING_URL_START + slug, async function (err, code) {
+        qrcode.toDataURL(process.env.FORWARDING_URL_START + slug, qrcodeOptions, async function (err, code) {
             if (err) throw err;
 
             //Update qrcode in db
@@ -269,7 +377,7 @@ router.post('/add', ensureAuthenticated, async (req, res) => {
     newQrcode
         .save()
         .then((value) => {
-            qrcode.toDataURL(process.env.FORWARDING_URL_START + value.slug, function (err, code) {
+            qrcode.toDataURL(process.env.FORWARDING_URL_START + value.slug, qrcodeOptions, function (err, code) {
                 if (err) throw err;
 
                 //Add new qrcode to db

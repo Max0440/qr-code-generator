@@ -74,6 +74,17 @@ input:focus {
           transition-duration: 0.2s;
 }
 
+input[type=color] {
+  margin-top: 0px;
+  background-color: transparent;
+}
+
+label {
+  margin-left: 10px;
+  color: #dcdddf;
+  font-size: 22px;
+}
+
 button {
   display: block;
   height: 45px;
@@ -280,6 +291,7 @@ hr {
 
 .qrcodes .qrcode-wrapper .code .qrcode {
   margin-left: auto;
+  background-color: transparent;
 }
 
 .qrcodes .qrcode-wrapper .code .qrcode img {

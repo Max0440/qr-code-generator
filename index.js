@@ -66,4 +66,3 @@ app.use((req, res) => {
 
 app.listen(process.env.EXPRESS_PORT);
 
-//TODO: rewrite error messages

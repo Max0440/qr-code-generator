@@ -30,6 +30,9 @@
                 <form action="/qrcode/edit" method="POST">
                     <button type="submit" name="edit" value="<%= code.slug %>">Edit</button>
                 </form>
+                <form action="/qrcode/print" method="POST">
+                    <button type="submit" name="print" value="<%= code.slug %>">Print</button>
+                </form>
             </div>
         </div>
     </div>

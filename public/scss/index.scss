@@ -69,6 +69,17 @@ input {
         background-color: $gray5;
         transition-duration: 0.2s;
     }
+
+    &[type=color] {
+        margin-top: 0px;
+        background-color: transparent;
+    }
+}
+
+label {
+    margin-left: 10px;
+    color: $color2;
+    font-size: 22px;
 }
 
 button {
@@ -262,6 +273,7 @@ hr {
 
             .qrcode {
                 margin-left: auto;
+                background-color: transparent;
 
                 img {
                     height: 170px;
