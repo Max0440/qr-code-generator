@@ -147,8 +147,6 @@ router.post('/editSubmit', ensureAuthenticated, async (req, res) => {
         errors.push({ msg: 'Error in data' });
     }
 
-    //TODO Slug taken, redirect to edit page
-    //TODO Unauthorized, redirect to qrcode page
     if (errors.length > 0) {
         if (unauthorized === true) {
             req.flash('error_msg', errors[0].msg);
