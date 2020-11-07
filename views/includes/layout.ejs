@@ -17,7 +17,6 @@
                 <% if(typeof user !== 'undefined') { %>
                 <li><a href="/qrcode" class="nav-links">See QR Codes</a></li>
                 <li><a href="/qrcode/add" class="nav-links">Add QR Code</a></li>
-                <!--TODO: Logout button-->
                 <% } %>
             </ul>
         </nav>
@@ -26,6 +25,7 @@
         <%- body %>
 
         <script src="/assets/js/jquery.js"></script>
+        <script src="/assets/js/navbar.js"></script>
         <script src="/assets/js/qrcodeInfoHandler.js"></script>
     </body>
 </html>
