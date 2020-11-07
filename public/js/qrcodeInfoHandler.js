@@ -6,7 +6,7 @@ $(() => {
         //TODO: Always opened
         indicator.animateRotate(90, 400);
         $(infos).show(500);
-
+        
         $(indicator).click(function (e) {
             e.preventDefault();
             if (indicator.attr('style') == 'transform: rotate(90deg);') {

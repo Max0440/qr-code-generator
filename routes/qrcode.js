@@ -45,7 +45,6 @@ router.get('/add', ensureAuthenticated, (req, res) => {
 //edit qrcode page
 router.post('/edit', ensureAuthenticated, async (req, res) => {
     var slug = req.body.edit;
-    console.log(slug);
 
     let errors = [];
 
@@ -163,9 +162,6 @@ router.post('/editSubmit', ensureAuthenticated, async (req, res) => {
         return;
     }
 
-    console.log('Slug:', slug);
-    console.log('Url:', url);
-
     //update url and slug
     try {
         await Qrcode.findOneAndUpdate({ slug: oldSlug }, { slug: slug, url: url }).exec();
@@ -259,8 +255,6 @@ router.post('/add', ensureAuthenticated, async (req, res) => {
         });
         return;
     }
-
-    console.log('Slug:', slug);
 
     newQrcode
         .save()

@@ -35,7 +35,6 @@ router.get('/register', (req, res) => {
 router.post('/register', async (req, res) => {
     const { name, username, email, password, password2 } = req.body;
     let errors = [];
-    console.log(' Name ' + name + 'username ' + username + ' email :' + email + ' pass:' + password);
 
     //check if fields empty
     if (!name || !username || !email || !password || !password2) {
@@ -74,7 +73,6 @@ router.post('/register', async (req, res) => {
     }
 
     if (emailFound) {
-        console.log(emailFound);
         errors.push({ msg: 'Email already registerd' });
         res.render('users/register', {
             errors: errors,
@@ -88,7 +86,6 @@ router.post('/register', async (req, res) => {
     }
 
     if (usernameFound) {
-        console.log(usernameFound);
         errors.push({ msg: 'Username already registerd' });
         res.render('users/register', {
             errors: errors,
@@ -118,11 +115,10 @@ router.post('/register', async (req, res) => {
         newUser
             .save()
             .then((value) => {
-                console.log(value);
                 req.flash('success_msg', 'You have now registered!');
                 res.redirect('/users/login');
             })
-            .catch((value) => console.log(value));
+            .catch((value) => console.error(value));
     });
 });
 
