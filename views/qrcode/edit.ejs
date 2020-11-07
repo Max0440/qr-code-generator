@@ -7,5 +7,5 @@
 <form action="/qrcode/editSubmit" method="POST">
     <input type="url" name="url" placeholder="URL" value="<%= typeof url != 'undefined' ? url : '' %>" />
     <input type="text" name="slug" placeholder="Slug" value="<%= typeof slug != 'undefined' ? slug : '' %>" />
-    <button type="submit" name="oldSlug" value="<%= typeof slug != 'undefined' ? slug : '' %>" >Change</button>
+    <button type="submit" name="oldSlug" value="<%= typeof oldSlug != 'undefined' ? oldSlug : '' %>" >Change</button>
 </form>

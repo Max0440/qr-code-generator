@@ -82,6 +82,7 @@ router.post('/edit', ensureAuthenticated, async (req, res) => {
     res.render('qrcode/edit', {
         url: code.url,
         slug: code.slug,
+        oldSlug: code.slug,
         user: req.user,
     });
 });
@@ -91,6 +92,7 @@ router.post('/editSubmit', ensureAuthenticated, async (req, res) => {
     var { url, slug, oldSlug } = req.body;
 
     let errors = [];
+    let unauthorized = false;
 
     //check if old slug is from user
     try {
@@ -108,6 +110,7 @@ router.post('/editSubmit', ensureAuthenticated, async (req, res) => {
     }
 
     if (!validSlug) {
+        unauthorized = true;
         errors.push({ msg: 'Unauthorized' });
     }
 
@@ -147,9 +150,18 @@ router.post('/editSubmit', ensureAuthenticated, async (req, res) => {
     //TODO Slug taken, redirect to edit page
     //TODO Unauthorized, redirect to qrcode page
     if (errors.length > 0) {
-        console.log(errors);
-        req.flash('error_msg', errors[0].msg);
-        res.redirect('/qrcode');
+        if (unauthorized === true) {
+            req.flash('error_msg', errors[0].msg);
+            res.redirect('/qrcode');
+        } else {
+            res.render('qrcode/edit', {
+                errors: errors,
+                url: url,
+                slug: slug,
+                oldSlug: oldSlug,
+                user: req.user,
+            })
+        }
         return;
     }
 
