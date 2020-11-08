@@ -5,7 +5,6 @@ const User = require('../models/users');
 module.exports = function (passport) {
     passport.use(
         new LocalStrategy({ usernameField: 'email' }, async (email, password, done) => {
-            console.log(email);
             //check email
             var user = await checkEmail(email);
 
