@@ -472,7 +472,7 @@ router.post('/delete', ensureAuthenticated, async (req, res) => {
     //delete slug from user
     removeSlugFromUser(slug, req.user._id);
 
-    req.flash('success_msg', 'QR Code deleted')
+    req.flash('success_msg', 'QR Code deleted');
     res.redirect('/qrcode');
 });
 
@@ -486,8 +486,8 @@ router.get('/scan/:id', async (req, res) => {
 
         //check if qrcodes exists
         if (result === null) {
-            //TODO: error page
             console.error(`Qrcode from scan with id ${req.params.id} not found`);
+            res.render('qrcode/notFound');
             return;
         }
 
