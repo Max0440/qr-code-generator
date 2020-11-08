@@ -1,5 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
+const joi = require('joi');
 const passport = require('passport');
 const { ensureAuthenticated } = require('../config/auth.js');
 
@@ -64,25 +65,25 @@ router.post('/login', (req, res, next) => {
 
 //register handler
 router.post('/register', async (req, res) => {
-    //TODO: check with yup
     const { name, username, email, password, password2 } = req.body;
     let errors = [];
 
-    //check if fields empty
-    if (!name || !username || !email || !password || !password2) {
-        errors.push({ msg: 'Please fill in all fields' });
+    //validate data
+    let newJoiSchema = joi.object({
+        name: joi.string().max(255).required(),
+        username: joi.string().alphanum().max(255).required(),
+        email: joi.string().max(255).email().required(),
+        password: joi.string().min(6).max(255).required(),
+        password2: joi.ref('password'),
+    });
+
+    let validData = newJoiSchema.validate({ name: name, username: username, email: email, password: password, password2: password2 });
+
+    if (validData.error) {
+        errors.push({ msg: validData.error.details[0].message });
     }
 
-    //check if passwords match
-    if (password !== password2) {
-        errors.push({ msg: 'Passwords do not match' });
-    }
-
-    //check if password is more than 6 characters
-    if (password.length < 6) {
-        errors.push({ msg: 'The password must have at least 6 characters' });
-    }
-
+    //push errors
     if (errors.length > 0) {
         res.render('users/register', {
             errors: errors,
@@ -96,7 +97,7 @@ router.post('/register', async (req, res) => {
         return;
     }
 
-    //validation passed
+    //check if userer already registerd
     try {
         var emailFound = await User.findOne({ email: email }).exec();
         var usernameFound = await User.findOne({ username: username }).exec();
@@ -130,6 +131,7 @@ router.post('/register', async (req, res) => {
         return;
     }
 
+    //add user to db
     const newUser = new User({
         name: name,
         username: username,
@@ -156,13 +158,20 @@ router.post('/register', async (req, res) => {
 
 //update userdata handler
 router.post('/update', ensureAuthenticated, async (req, res) => {
-    //TODO: check with yup
     var { name, username, email } = req.body;
     let errors = [];
 
-    //check if fields empty
-    if (!name || !username || !email) {
-        errors.push({ msg: 'Please fill in all fields' });
+    //validate data
+    let newJoiSchema = joi.object({
+        name: joi.string().max(255).required(),
+        username: joi.string().alphanum().max(255).required(),
+        email: joi.string().max(255).email().required(),
+    });
+
+    let validData = newJoiSchema.validate({ name: name, username: username, email: email });
+
+    if (validData.error) {
+        errors.push({ msg: validData.error.details[0].message });
     }
 
     try {
@@ -203,7 +212,7 @@ router.post('/update', ensureAuthenticated, async (req, res) => {
         }
 
         if (result) {
-            errors.push({ msg: 'Email taken' });
+            errors.push({ msg: 'Email already registerd' });
         } else {
             newUserdata.email = email;
         }
@@ -233,23 +242,19 @@ router.post('/update', ensureAuthenticated, async (req, res) => {
 
 //update userdata handler
 router.post('/updatePasswd', ensureAuthenticated, async (req, res) => {
-    //TODO: check with yup
     var { password, password2 } = req.body;
     let errors = [];
 
-    //check if fields empty
-    if (!password || !password2) {
-        errors.push({ msg: 'Please fill in all fields' });
-    }
+    //validate data
+    let newJoiSchema = joi.object({
+        password: joi.string().min(6).max(255).required(),
+        password2: joi.ref('password'),
+    });
 
-    //check if passwords match
-    if (password !== password2) {
-        errors.push({ msg: 'Passwords do not match' });
-    }
+    let validData = newJoiSchema.validate({ password: password, password2: password2 });
 
-    //check if password is more than 6 characters
-    if (password.length < 6) {
-        errors.push({ msg: 'The password must have at least 6 characters' });
+    if (validData.error) {
+        errors.push({ msg: validData.error.details[0].message });
     }
 
     if (errors.length > 0) {
