@@ -237,8 +237,6 @@ router.post('/updatePasswd', ensureAuthenticated, async (req, res) => {
     var { password, password2 } = req.body;
     let errors = [];
 
-    console.log(password);
-    console.log(password2);
     //check if fields empty
     if (!password || !password2) {
         errors.push({ msg: 'Please fill in all fields' });
