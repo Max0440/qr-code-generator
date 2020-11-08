@@ -29,7 +29,7 @@ a {
     outline: none;
     text-align: center;
     text-decoration: none;
-    font-size: 1.5em;
+    font-size: 30px;
     color: $color2;
     transition-duration: 0.2s;
 
@@ -319,3 +319,18 @@ hr {
 }
 
 // END show qrcodes END
+
+.currentData {
+    margin: 30px auto;
+    text-align: center;
+
+    h2 {
+        font-size: 36px;
+        color: $color1;
+    }
+
+    h3 {
+        font-size: 22px;
+        color: $color2;
+    }
+}

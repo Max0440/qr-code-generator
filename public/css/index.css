@@ -19,7 +19,7 @@ a {
   outline: none;
   text-align: center;
   text-decoration: none;
-  font-size: 1.5em;
+  font-size: 30px;
   color: #dcdddf;
   -webkit-transition-duration: 0.2s;
           transition-duration: 0.2s;
@@ -335,4 +335,19 @@ hr {
   margin: 10px 15px 15px auto;
   font-size: 20px;
   border-radius: 7px;
+}
+
+.currentData {
+  margin: 30px auto;
+  text-align: center;
+}
+
+.currentData h2 {
+  font-size: 36px;
+  color: #ffffff;
+}
+
+.currentData h3 {
+  font-size: 22px;
+  color: #dcdddf;
 }

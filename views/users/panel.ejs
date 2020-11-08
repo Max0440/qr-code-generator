@@ -2,5 +2,14 @@
 
 <%- include ('../includes/messages') %>
 
+<!--TODO: current data-->
+
+<div class="currentData">
+    <h2>Current userdata</h2>
+    <h3>Name: <%= user.name %></h3>
+    <h3>Username: <%= user.username %></h3>
+    <h3>Email: <%= user.email %></h3>
+</div>
+
 <a href="/users/update">→ Update userdata</a>
 <a href="/users/updatePasswd">→ Update password</a>
