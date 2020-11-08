@@ -21,6 +21,18 @@ qrcodeOptions = {
     },
 };
 
+disabledQrcodeOptions = {
+    errorCorrectionLevel: 'H',
+    type: 'image/jpeg',
+    quality: 1,
+    margin: 2.5,
+    scale: 5,
+    color: {
+        dark: '#DD0000',
+        light: '#FFFFFF',
+    },
+};
+
 //show qrcodes page
 router.get('/', ensureAuthenticated, async (req, res) => {
     try {
@@ -430,7 +442,7 @@ router.post('/printSubmit', ensureAuthenticated, async (req, res) => {
     });
 });
 
-//delete qrcode
+//delete qrcode handeler
 router.post('/delete', ensureAuthenticated, async (req, res) => {
     var slug = req.body.delete;
 
@@ -476,8 +488,72 @@ router.post('/delete', ensureAuthenticated, async (req, res) => {
     res.redirect('/qrcode');
 });
 
+//toggle active handler
+router.post('/toggleActive', ensureAuthenticated, async (req, res) => {
+    var slug = req.body.slug;
+
+    let errors = [];
+
+    //check if slug is from user
+    try {
+        var userCodes = await getSlugsFromUser(req.user._id);
+    } catch (e) {
+        console.error(e);
+    }
+
+    for (let i = 0; i < userCodes.length; i++) {
+        const element = userCodes[i];
+        if (element === slug) {
+            var validSlug = true;
+            break;
+        }
+    }
+
+    if (!validSlug) {
+        errors.push({ msg: 'Unauthorized' });
+    }
+
+    //push errors
+    if (errors.length > 0) {
+        res.render('qrcode/add', {
+            errors: errors,
+            user: req.user,
+        });
+        return;
+    }
+
+    //generate new qrcode
+    try {
+        var qrcodeToEdit = await Qrcode.findOne({ slug: slug }).exec();
+    } catch (e) {
+        console.error(e);
+    }
+
+    //set vars depending on
+    if (qrcodeToEdit.active == true) {
+        var tempQrcodeOptions = disabledQrcodeOptions;
+        var newActiveState = false;
+    } else {
+        var tempQrcodeOptions = qrcodeOptions;
+        var newActiveState = true;
+    }
+
+    qrcode.toDataURL(process.env.FORWARDING_URL_START + slug, tempQrcodeOptions, async function (err, code) {
+        if (err) throw err;
+
+        //Update entry in db
+        try {
+            await Qrcode.findOneAndUpdate({ slug: slug }, { code: code, active:newActiveState }).exec();
+        } catch (e) {
+            console.error(e);
+        }
+    });
+    res.redirect('/qrcode');
+});
+
 //scan qrcode
 router.get('/scan/:id', async (req, res) => {
+    //TODO: check if code active
     const id = req.params.id;
 
     //get code
@@ -486,8 +562,12 @@ router.get('/scan/:id', async (req, res) => {
 
         //check if qrcodes exists
         if (result === null) {
-            console.error(`Qrcode from scan with id ${req.params.id} not found`);
             res.render('qrcode/notFound');
+            return;
+        }
+
+        if (result.active === false) {
+            res.render('qrcode/inactive');
             return;
         }
 

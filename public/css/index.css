@@ -289,6 +289,10 @@ hr {
   color: #dcdddf;
 }
 
+.qrcodes .qrcode-wrapper .code .url .code-disabled {
+  color: red;
+}
+
 .qrcodes .qrcode-wrapper .code .qrcode {
   margin-left: auto;
   background-color: transparent;

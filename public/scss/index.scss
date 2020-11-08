@@ -269,6 +269,10 @@ hr {
                     background-color: transparent;
                     color: $color2;
                 }
+
+                .code-disabled {
+                    color: red;
+                }
             }
 
             .qrcode {

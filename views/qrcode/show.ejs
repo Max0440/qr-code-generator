@@ -12,7 +12,7 @@
     <div class="qrcode-wrapper">
         <div class="code">
             <div class="url">
-                <h2>URL: <%= code.url %></h2>
+                <h2 class="<%= code.active == false ? 'code-disabled' : 'code-enabled' %>">URL: <%= code.url %></h2>
             </div>
             <div class="qrcode">
                 <img src="<%= code.code %>" alt="qrcode" />
@@ -32,6 +32,9 @@
                 </form>
                 <form action="/qrcode/print" method="POST">
                     <button type="submit" name="print" value="<%= code.slug %>">Print</button>
+                </form>
+                <form action="/qrcode/toggleActive" method="POST">
+                    <button type="submit" name="slug" value="<%= code.slug %>"><%= code.active == true ? 'Disable' : 'Enable' %></button>
                 </form>
             </div>
         </div>
