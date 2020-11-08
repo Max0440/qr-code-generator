@@ -185,12 +185,11 @@ router.post('/printSubmit', ensureAuthenticated, async (req, res) => {
     qrcode.toDataURL(process.env.FORWARDING_URL_START + slug, customQrcodeOptions, function (err, code) {
         if (err) throw err;
 
-        //TODO: gescheid machen
-        console.log(code);
+        //TODO: print data:image
         res.render('qrcode/printed', {
             code: code,
             user: req.user,
-        })
+        });
     });
 });
 
@@ -224,8 +223,8 @@ router.post('/editSubmit', ensureAuthenticated, async (req, res) => {
     //check if slug entered & not in db
     try {
         if (slug.length === 0) {
-            //TODO: autogenerate slug
-            errors.push({ msg: 'Please enter a slug' });
+            //set new slug to old slug
+            slug = oldSlug;
         }
         let inDb = await getCode(slug);
         if (inDb) {
