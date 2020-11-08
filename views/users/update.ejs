@@ -1,0 +1,10 @@
+<h1>Update user</h1>
+
+<%- include ('../includes/messages') %>
+
+<form action="/users/update" method="POST">
+    <input type="name" name="name" placeholder="Enter Name" value="<%= typeof user.name != 'undefined' ? user.name : '' %>" />
+    <input type="name" name="username" placeholder="Enter username" value="<%= typeof user.username != 'undefined' ? user.username : '' %>" />
+    <input type="email" name="email" placeholder="Enter Email" value="<%= typeof user.email != 'undefined' ? user.email : '' %>" />
+    <button type="submit">Update</button>
+</form>

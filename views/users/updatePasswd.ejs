@@ -1,0 +1,11 @@
+<h1>Update password</h1>
+
+<%- include ('../includes/messages') %>
+
+<!--TODO: current data-->
+
+<form action="/users/updatePasswd" method="POST">
+    <input type="password" name="password" placeholder="New Password" />
+    <input type="password" name="password2" placeholder="Confirm new Password" />
+    <button type="submit">Update</button>
+</form>

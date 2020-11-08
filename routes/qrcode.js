@@ -330,7 +330,7 @@ router.post('/add', ensureAuthenticated, async (req, res) => {
         try {
             let inDb = await getCode(slug);
             if (inDb) {
-                errors.push({ msg: 'The slug is taken' });
+                errors.push({ msg: 'Slug taken' });
             }
         } catch (e) {
             console.error(e);
