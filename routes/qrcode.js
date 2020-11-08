@@ -136,8 +136,8 @@ router.post('/print', ensureAuthenticated, async (req, res) => {
 
     res.render('qrcode/print', {
         url: code.url,
-        backgroundColor: '#2f3136',
-        codeColor: '#FFFFFF',
+        backgroundColor: '#FFFFFF',
+        codeColor: '#000000',
         slug: code.slug,
         user: req.user,
     });
@@ -148,6 +148,7 @@ router.post('/printSubmit', ensureAuthenticated, async (req, res) => {
     var { slug, backgroundColor, codeColor, scale } = req.body;
 
     let errors = [];
+    let unauthorized = false;
 
     //check if old slug is from user
     try {
@@ -165,7 +166,29 @@ router.post('/printSubmit', ensureAuthenticated, async (req, res) => {
     }
 
     if (!validSlug) {
+        unauthorized = true;
         errors.push({ msg: 'Unauthorized' });
+    }
+
+    if (parseInt(scale) > 60) {
+        errors.push({ msg: 'Size too high' });
+    }
+
+    if (errors.length > 0) {
+        if (unauthorized === true) {
+            req.flash('error_msg', errors[0].msg);
+            res.redirect('/qrcode');
+        } else {
+            res.render('qrcode/print', {
+                errors: errors,
+                scale: scale,
+                backgroundColor: backgroundColor,
+                codeColor: codeColor,
+                slug: slug,
+                user: req.user,
+            });
+        }
+        return;
     }
 
     //set code options
