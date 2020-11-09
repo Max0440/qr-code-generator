@@ -1,4 +1,4 @@
-// VAL
+// VAR
 $gray1: #42454d;
 $gray2: #2f3136;
 $gray3: #292b2f;
@@ -70,7 +70,7 @@ input {
         transition-duration: 0.2s;
     }
 
-    &[type=color] {
+    &[type='color'] {
         margin-top: 0px;
         background-color: transparent;
     }
@@ -145,7 +145,6 @@ form {
 // navbar
 
 .navbar {
-    position: relative;
     padding-bottom: 20px;
 
     .logo {
@@ -164,12 +163,11 @@ form {
     .logo {
         display: inline-block;
         font-size: 22px;
-        font-family: #fff;
         letter-spacing: 4px;
         margin-top: 20px;
         margin-left: 20px;
         text-decoration: none;
-        color: #fff;
+        color: $color1;
     }
 
     .main-nav {
@@ -179,6 +177,10 @@ form {
         li {
             text-align: center;
             margin-top: 15px;
+        }
+
+        #firstLiElement {
+            margin-top: 25px;
         }
     }
 
@@ -223,6 +225,10 @@ form {
             li {
                 margin: 0;
             }
+
+            #firstLiElement {
+                margin-top: 0px;
+            }
         }
 
         .nav-links {
@@ -257,8 +263,11 @@ hr {
             display: flex;
             background-color: $gray2;
             border-radius: 20px;
+            height: 170px;
 
             .url {
+                max-height: 160px;
+                overflow: hidden;
                 margin-top: auto;
                 margin-bottom: auto;
                 margin-left: 20px;
@@ -267,6 +276,7 @@ hr {
                 h2 {
                     font-size: 35px;
                     background-color: transparent;
+                    overflow-wrap: break-word;
                     color: $color2;
                 }
 
@@ -289,18 +299,21 @@ hr {
         }
 
         .infos {
-            margin-left: 30px;
             margin-top: 10px;
+            overflow: hidden;
             background-color: transparent;
 
             h2 {
+                margin-left: 30px;
                 font-size: 22px;
+                overflow-wrap: break-word;
                 background-color: transparent;
                 color: $color2;
             }
 
             .buttons {
                 display: flex;
+                margin-left: 30px;
                 background-color: transparent;
 
                 form {
@@ -315,6 +328,37 @@ hr {
                         margin: 10px 15px 15px auto;
                         font-size: 20px;
                         border-radius: 7px;
+                    }
+                }
+            }
+        }
+    }
+
+    @media screen and (max-width: 950px) {
+        .qrcode-wrapper {
+            width: 90%;
+            border-radius: 12px;
+
+            .code {
+                border-radius: 12px;
+
+                h2 {
+                    font-size: 32px;
+                }
+
+                .qrcode {
+                    display: none;
+                }
+            }
+
+            .buttons {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+
+                form {
+                    button {
+                        margin: 10px;
                     }
                 }
             }

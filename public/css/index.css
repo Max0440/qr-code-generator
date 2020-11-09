@@ -74,7 +74,7 @@ input:focus {
           transition-duration: 0.2s;
 }
 
-input[type=color] {
+input[type='color'] {
   margin-top: 0px;
   background-color: transparent;
 }
@@ -154,7 +154,6 @@ form {
 }
 
 .navbar {
-  position: relative;
   padding-bottom: 20px;
 }
 
@@ -174,12 +173,11 @@ form {
 .navbar .logo {
   display: inline-block;
   font-size: 22px;
-  font-family: #fff;
   letter-spacing: 4px;
   margin-top: 20px;
   margin-left: 20px;
   text-decoration: none;
-  color: #fff;
+  color: #ffffff;
 }
 
 .navbar .main-nav {
@@ -190,6 +188,10 @@ form {
 .navbar .main-nav li {
   text-align: center;
   margin-top: 15px;
+}
+
+.navbar .main-nav #firstLiElement {
+  margin-top: 25px;
 }
 
 .navbar .nav-links {
@@ -245,6 +247,9 @@ form {
   .navbar .main-nav li {
     margin: 0;
   }
+  .navbar .main-nav #firstLiElement {
+    margin-top: 0px;
+  }
   .navbar .nav-links {
     font-size: 22px;
     margin-left: 40px;
@@ -274,9 +279,12 @@ hr {
   display: flex;
   background-color: #2f3136;
   border-radius: 20px;
+  height: 170px;
 }
 
 .qrcodes .qrcode-wrapper .code .url {
+  max-height: 160px;
+  overflow: hidden;
   margin-top: auto;
   margin-bottom: auto;
   margin-left: 20px;
@@ -286,6 +294,7 @@ hr {
 .qrcodes .qrcode-wrapper .code .url h2 {
   font-size: 35px;
   background-color: transparent;
+  overflow-wrap: break-word;
   color: #dcdddf;
 }
 
@@ -306,13 +315,15 @@ hr {
 }
 
 .qrcodes .qrcode-wrapper .infos {
-  margin-left: 30px;
   margin-top: 10px;
+  overflow: hidden;
   background-color: transparent;
 }
 
 .qrcodes .qrcode-wrapper .infos h2 {
+  margin-left: 30px;
   font-size: 22px;
+  overflow-wrap: break-word;
   background-color: transparent;
   color: #dcdddf;
 }
@@ -321,6 +332,7 @@ hr {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  margin-left: 30px;
   background-color: transparent;
 }
 
@@ -339,6 +351,35 @@ hr {
   margin: 10px 15px 15px auto;
   font-size: 20px;
   border-radius: 7px;
+}
+
+@media screen and (max-width: 950px) {
+  .qrcodes .qrcode-wrapper {
+    width: 90%;
+    border-radius: 12px;
+  }
+  .qrcodes .qrcode-wrapper .code {
+    border-radius: 12px;
+  }
+  .qrcodes .qrcode-wrapper .code h2 {
+    font-size: 32px;
+  }
+  .qrcodes .qrcode-wrapper .code .qrcode {
+    display: none;
+  }
+  .qrcodes .qrcode-wrapper .buttons {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+  }
+  .qrcodes .qrcode-wrapper .buttons form button {
+    margin: 10px;
+  }
 }
 
 .currentData {
