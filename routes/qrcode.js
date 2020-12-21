@@ -552,7 +552,6 @@ router.post('/toggleActive', ensureAuthenticated, async (req, res) => {
 
 //scan qrcode
 router.get('/scan/:id', async (req, res) => {
-    //TODO: check if code active
     const id = req.params.id;
 
     //get code
