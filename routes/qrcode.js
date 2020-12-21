@@ -433,12 +433,11 @@ router.post('/printSubmit', ensureAuthenticated, async (req, res) => {
     //generate code
     qrcode.toDataURL(process.env.FORWARDING_URL_START + slug, customQrcodeOptions, function (err, code) {
         if (err) throw err;
+        code = code.split(",")[1];
+        code = Buffer.from(code, 'base64');
 
-        //TODO: print data:image
-        res.render('qrcode/printed', {
-            code: code,
-            user: req.user,
-        });
+        res.contentType('image/png');
+        res.send(code);
     });
 });
 
